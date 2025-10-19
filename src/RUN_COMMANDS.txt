@@ -1,0 +1,275 @@
+═══════════════════════════════════════════════════════════════════
+  GEREJA DAMAI KRISTUS - FINANCE MANAGEMENT SYSTEM
+  Command Reference - Copy & Paste Ready
+═══════════════════════════════════════════════════════════════════
+
+📋 STEP 1: SETUP MYSQL DATABASE
+════════════════════════════════════════════════════════════════════
+
+# Login ke MySQL
+mysql -u root -p
+
+# Buat database dan table
+mysql -u root -p < database/schema.sql
+
+# Insert sample data
+mysql -u root -p gereja_damai_kristus < database/seed.sql
+
+# Verifikasi (opsional)
+mysql -u root -p -e "USE gereja_damai_kristus; SELECT COUNT(*) FROM finance;"
+
+
+📋 STEP 2: SETUP BACKEND
+════════════════════════════════════════════════════════════════════
+
+# Masuk ke folder backend
+cd backend
+
+# Install dependencies
+npm install
+
+# Copy environment file
+cp .env.example .env
+
+# PENTING: Edit file .env dengan text editor
+# Sesuaikan DB_PASSWORD dengan password MySQL Anda
+nano .env
+# atau
+notepad .env
+
+# Test database connection
+node -e "require('./config/database')"
+
+# Start backend server (Development)
+npm run dev
+
+# Backend akan berjalan di: http://localhost:3001
+# Jangan close terminal ini!
+
+
+📋 STEP 3: SETUP FRONTEND (Terminal Baru)
+════════════════════════════════════════════════════════════════════
+
+# Buka terminal baru, masuk ke root directory project
+
+# Install library xlsx untuk Excel export
+npm install xlsx
+
+# Start frontend development server
+npm run dev
+
+# Frontend akan berjalan di: http://localhost:5173
+# Buka browser dan akses URL tersebut
+
+
+📋 STEP 4: TEST APLIKASI
+════════════════════════════════════════════════════════════════════
+
+# Test backend API (terminal baru)
+curl http://localhost:3001/health
+curl http://localhost:3001/api/finance/transactions
+
+# Test frontend
+# Buka browser: http://localhost:5173
+# 1. Klik menu "Finance"
+# 2. Lihat data muncul dari database
+# 3. Klik "Record Transaction" untuk tambah data
+# 4. Klik "Export to Excel" untuk download
+
+
+═══════════════════════════════════════════════════════════════════
+  TROUBLESHOOTING COMMANDS
+═══════════════════════════════════════════════════════════════════
+
+🔧 MySQL tidak jalan
+────────────────────────────────────────────────────────────────────
+# Windows
+net start MySQL
+
+# Mac
+brew services start mysql
+
+# Linux
+sudo systemctl start mysql
+sudo systemctl status mysql
+
+
+🔧 Lupa password MySQL
+────────────────────────────────────────────────────────────────────
+mysql -u root -p
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'new_password';
+FLUSH PRIVILEGES;
+
+
+🔧 Backend error / dependencies issue
+────────────────────────────────────────────────────────────────────
+cd backend
+rm -rf node_modules
+npm cache clean --force
+npm install
+npm run dev
+
+
+🔧 Frontend error / xlsx not found
+────────────────────────────────────────────────────────────────────
+rm -rf node_modules
+npm cache clean --force
+npm install
+npm install xlsx
+npm run dev
+
+
+🔧 Port sudah digunakan
+────────────────────────────────────────────────────────────────────
+# Cari process yang menggunakan port
+# Windows
+netstat -ano | findstr :3001
+
+# Mac/Linux
+lsof -i :3001
+
+# Kill process
+# Windows
+taskkill /PID <PID> /F
+
+# Mac/Linux
+kill -9 <PID>
+
+
+═══════════════════════════════════════════════════════════════════
+  USEFUL COMMANDS
+═══════════════════════════════════════════════════════════════════
+
+📊 Database Management
+────────────────────────────────────────────────────────────────────
+# Login ke MySQL
+mysql -u root -p gereja_damai_kristus
+
+# Lihat semua table
+SHOW TABLES;
+
+# Lihat data finance
+SELECT * FROM finance ORDER BY date DESC LIMIT 10;
+
+# Count total transaksi
+SELECT COUNT(*) FROM finance;
+
+# Summary per bulan
+SELECT 
+  MONTH(date) as bulan,
+  SUM(CASE WHEN type='income' THEN amount ELSE 0 END) as pemasukan,
+  SUM(CASE WHEN type='expense' THEN amount ELSE 0 END) as pengeluaran
+FROM finance 
+GROUP BY MONTH(date);
+
+# Backup database
+mysqldump -u root -p gereja_damai_kristus > backup.sql
+
+# Restore database
+mysql -u root -p gereja_damai_kristus < backup.sql
+
+
+🚀 Development
+────────────────────────────────────────────────────────────────────
+# Start backend (development mode with auto-reload)
+cd backend
+npm run dev
+
+# Start frontend
+npm run dev
+
+# Build frontend for production
+npm run build
+
+
+🔍 Testing
+────────────────────────────────────────────────────────────────────
+# Test backend health
+curl http://localhost:3001/health
+
+# Get all transactions
+curl http://localhost:3001/api/finance/transactions
+
+# Get summary
+curl http://localhost:3001/api/finance/summary
+
+# Create transaction (POST)
+curl -X POST http://localhost:3001/api/finance/transactions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "date": "2025-01-26",
+    "description": "Test Transaction",
+    "type": "income",
+    "category": "Persembahan",
+    "amount": 1000000,
+    "notes": "Testing API"
+  }'
+
+
+═══════════════════════════════════════════════════════════════════
+  QUICK REFERENCE
+═══════════════════════════════════════════════════════════════════
+
+URLs:
+  Frontend:  http://localhost:5173
+  Backend:   http://localhost:3001
+  API:       http://localhost:3001/api/finance
+  Health:    http://localhost:3001/health
+
+Files:
+  Backend Config:   backend/.env
+  Database Schema:  database/schema.sql
+  Sample Data:      database/seed.sql
+  Frontend Config:  components/Finance.tsx (API_BASE_URL)
+
+Commands:
+  Start Backend:    cd backend && npm run dev
+  Start Frontend:   npm run dev
+  Install xlsx:     npm install xlsx
+  MySQL Login:      mysql -u root -p
+
+
+═══════════════════════════════════════════════════════════════════
+  FIRST TIME SETUP (Complete)
+═══════════════════════════════════════════════════════════════════
+
+# Terminal 1 - Database
+mysql -u root -p < database/schema.sql
+mysql -u root -p gereja_damai_kristus < database/seed.sql
+
+# Terminal 2 - Backend
+cd backend
+npm install
+cp .env.example .env
+# Edit .env file (sesuaikan DB_PASSWORD)
+npm run dev
+
+# Terminal 3 - Frontend
+npm install xlsx
+npm run dev
+
+# Browser
+# Open: http://localhost:5173
+
+
+═══════════════════════════════════════════════════════════════════
+  DAILY USAGE (After Setup)
+═══════════════════════════════════════════════════════════════════
+
+# Terminal 1 - Backend
+cd backend
+npm run dev
+
+# Terminal 2 - Frontend
+npm run dev
+
+# Browser
+# Open: http://localhost:5173
+
+
+═══════════════════════════════════════════════════════════════════
+  For more help, see:
+  - QUICKSTART.md        (Quick setup guide)
+  - SETUP_GUIDE.md       (Detailed setup)
+  - PROJECT_SUMMARY.md   (Complete overview)
+═══════════════════════════════════════════════════════════════════

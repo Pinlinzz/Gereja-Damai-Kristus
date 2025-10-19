@@ -1,0 +1,200 @@
+═══════════════════════════════════════════════════════════════════
+  COPY-PASTE COMMANDS - FIX "FAILED TO FETCH"
+═══════════════════════════════════════════════════════════════════
+
+⚠️  MENDAPAT ERROR "FAILED TO FETCH"?
+→  Backend API belum jalan!
+→  Ikuti command di bawah step-by-step
+
+═══════════════════════════════════════════════════════════════════
+  STEP 1: START MYSQL
+═══════════════════════════════════════════════════════════════════
+
+Windows (Run as Administrator):
+net start MySQL80
+
+Mac:
+brew services start mysql
+
+Linux:
+sudo systemctl start mysql
+
+Verifikasi MySQL jalan:
+mysql -u root -p
+(lalu ketik: exit)
+
+═══════════════════════════════════════════════════════════════════
+  STEP 2: EDIT FILE .ENV (PENTING!)
+═══════════════════════════════════════════════════════════════════
+
+Buka file: backend/.env
+
+Ganti baris ini:
+DB_PASSWORD=
+
+Menjadi:
+DB_PASSWORD=your_mysql_password_here
+
+Jika TIDAK ADA password MySQL, biarkan kosong:
+DB_PASSWORD=
+
+═══════════════════════════════════════════════════════════════════
+  STEP 3: INSTALL BACKEND DEPENDENCIES
+═══════════════════════════════════════════════════════════════════
+
+cd backend
+npm install
+
+Tunggu sampai selesai install...
+
+═══════════════════════════════════════════════════════════════════
+  STEP 4: TEST DATABASE CONNECTION
+═══════════════════════════════════════════════════════════════════
+
+npm test
+
+Atau:
+
+node test-connection.js
+
+HARUS MUNCUL:
+✅ Database connected successfully!
+📊 Finance table has 30 records
+🎉 Everything looks good!
+
+JIKA ERROR → Cek password di .env atau MySQL tidak jalan
+
+═══════════════════════════════════════════════════════════════════
+  STEP 5: START BACKEND SERVER
+═══════════════════════════════════════════════════════════════════
+
+npm run dev
+
+HARUS MUNCUL:
+🚀 Server is running on port 3001
+✅ Database connected successfully
+
+⚠️  JANGAN TUTUP TERMINAL INI! Backend harus tetap jalan.
+
+═══════════════════════════════════════════════════════════════════
+  STEP 6: TEST BACKEND API
+═══════════════════════════════════════════════════════════════════
+
+Buka browser:
+http://localhost:3001/health
+
+HARUS MUNCUL:
+{"status":"OK","message":"Gereja Damai Kristus API is running"}
+
+JIKA TIDAK BISA AKSES → Backend belum jalan, cek terminal backend
+
+═══════════════════════════════════════════════════════════════════
+  STEP 7: START FRONTEND (TERMINAL BARU!)
+═══════════════════════════════════════════════════════════════════
+
+Buka terminal BARU (klik icon + di VSCode terminal)
+
+cd ..
+npm install xlsx
+npm run dev
+
+HARUS MUNCUL:
+➜  Local:   http://localhost:5173/
+
+═══════════════════════════════════════════════════════════════════
+  STEP 8: BUKA APLIKASI
+═══════════════════════════════════════════════════════════════════
+
+Browser:
+http://localhost:5173
+
+Klik menu: Finance
+
+DATA HARUS MUNCUL! ✅
+
+Jika masih error "Failed to fetch":
+1. Cek terminal backend masih jalan?
+2. Buka F12 di browser → Console → lihat error
+3. Test: http://localhost:3001/health
+
+═══════════════════════════════════════════════════════════════════
+  TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════
+
+Error: "Cannot find module 'express'"
+→ cd backend && npm install
+
+Error: "Access denied for user 'root'"
+→ Password salah! Edit backend/.env
+
+Error: "Unknown database 'gereja_damai_kristus'"
+→ Database belum dibuat:
+  mysql -u root -p < database/schema.sql
+  mysql -u root -p gereja_damai_kristus < database/seed.sql
+
+Error: "connect ECONNREFUSED 127.0.0.1:3306"
+→ MySQL tidak jalan! Start dulu:
+  net start MySQL80
+
+Backend jalan tapi frontend masih "Failed to fetch"
+→ Restart backend: Ctrl+C lalu npm run dev
+→ Clear browser cache: Ctrl+Shift+R
+→ Cek port: http://localhost:3001/health
+
+═══════════════════════════════════════════════════════════════════
+  QUICK CHECK
+═══════════════════════════════════════════════════════════════════
+
+MySQL running?
+net start MySQL80
+
+Database exists?
+mysql -u root -p -e "SHOW DATABASES;"
+
+Backend running?
+curl http://localhost:3001/health
+
+Frontend running?
+http://localhost:5173
+
+═══════════════════════════════════════════════════════════════════
+  HASIL AKHIR (JIKA SUKSES)
+═══════════════════════════════════════════════════════════════════
+
+Terminal 1 (Backend):
+🚀 Server is running on port 3001
+✅ Database connected successfully
+
+Terminal 2 (Frontend):
+➜  Local:   http://localhost:5173/
+
+Browser (http://localhost:3001/health):
+{"status":"OK","message":"Gereja Damai Kristus API is running"}
+
+Browser (http://localhost:5173 → Finance):
+✅ Tabel transaksi muncul
+✅ Chart muncul
+✅ Summary cards muncul
+✅ Bisa Record Transaction
+✅ Bisa Export Excel
+
+═══════════════════════════════════════════════════════════════════
+  DAILY USE (Setelah setup)
+═══════════════════════════════════════════════════════════════════
+
+Terminal 1:
+cd backend
+npm run dev
+
+Terminal 2:
+npm run dev
+
+Browser:
+http://localhost:5173
+
+═══════════════════════════════════════════════════════════════════
+
+📖 BACA PANDUAN LENGKAP: FIX_FAILED_TO_FETCH.md
+📖 QUICK START: START_HERE.md
+
+═══════════════════════════════════════════════════════════════════

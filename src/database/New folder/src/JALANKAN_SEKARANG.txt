@@ -1,0 +1,123 @@
+═══════════════════════════════════════════════════════════════════
+  COPY-PASTE COMMANDS - JALANKAN SEKARANG!
+═══════════════════════════════════════════════════════════════════
+
+📌 PENTING: Baca file SETUP_NOW.md untuk penjelasan lengkap!
+
+═══════════════════════════════════════════════════════════════════
+  STEP 1: EDIT PASSWORD MYSQL
+═══════════════════════════════════════════════════════════════════
+
+1. Buka file: backend/.env
+2. Edit baris ini:
+
+   DB_PASSWORD=
+
+   Ganti dengan password MySQL Anda.
+   Jika TIDAK ADA password, biarkan kosong.
+
+═══════════════════════════════════════════════════════════════════
+  STEP 2: SETUP BACKEND
+═══════════════════════════════════════════════════════════════════
+
+Buka Terminal di VSCode (Ctrl + ` atau Cmd + `)
+
+# Masuk ke folder backend
+cd backend
+
+# Install dependencies
+npm install
+
+# Test database connection
+node -e "require('./config/database')"
+
+# Start backend server
+npm run dev
+
+═══════════════════════════════════════════════════════════════════
+  STEP 3: SETUP FRONTEND (Terminal Baru)
+═══════════════════════════════════════════════════════════════════
+
+Buka Terminal BARU (klik icon + di terminal VSCode)
+
+# Kembali ke root directory
+cd ..
+
+# Install xlsx library
+npm install xlsx
+
+# Start frontend
+npm run dev
+
+═══════════════════════════════════════════════════════════════════
+  STEP 4: BUKA BROWSER
+═══════════════════════════════════════════════════════════════════
+
+Buka browser dan akses:
+
+http://localhost:5173
+
+Klik menu "Finance" → Data seharusnya muncul!
+
+═══════════════════════════════════════════════════════════════════
+  VERIFIKASI
+═══════════════════════════════════════════════════════════════════
+
+Test Backend API (buka di browser):
+
+http://localhost:3001/health
+http://localhost:3001/api/finance/transactions
+
+Atau gunakan curl di terminal:
+
+curl http://localhost:3001/health
+
+═══════════════════════════════════════════════════════════════════
+  TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════
+
+Error: "Cannot find module 'express'"
+→ cd backend && npm install
+
+Error: "Database connection failed"
+→ Cek MySQL service: net start MySQL80 (Windows)
+→ Cek password di backend/.env
+
+Error: "Module 'xlsx' not found"
+→ npm install xlsx
+
+Data tidak muncul di Finance
+→ Pastikan backend jalan (cek terminal ada "Server is running")
+→ Buka F12 di browser → Console → lihat error
+
+═══════════════════════════════════════════════════════════════════
+  DAILY USE (Setelah Setup)
+═══════════════════════════════════════════════════════════════════
+
+Setiap kali mau pakai aplikasi, jalankan 2 command ini:
+
+Terminal 1:
+cd backend
+npm run dev
+
+Terminal 2:
+npm run dev
+
+Browser:
+http://localhost:5173
+
+═══════════════════════════════════════════════════════════════════
+  HASIL AKHIR
+═══════════════════════════════════════════════════════════════════
+
+Terminal 1 (Backend):
+🚀 Server is running on port 3001
+✅ Database connected successfully
+
+Terminal 2 (Frontend):
+➜  Local:   http://localhost:5173/
+
+Browser:
+Menu Finance → Data muncul dari MySQL ✅
+
+═══════════════════════════════════════════════════════════════════

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Backend API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        h2 { color: #666; margin-top: 0; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #c62828;
+        }
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #2e7d32;
+        }
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.ok {
+            background: #4CAF50;
+            color: white;
+        }
+        .status.fail {
+            background: #f44336;
+            color: white;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge.income {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .badge.expense {
+            background: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Backend API - Gereja Damai Kristus</h1>
+    
+    <div class="container">
+        <h2>1. Health Check</h2>
+        <button onclick="testHealth()">Test Health Endpoint</button>
+        <div id="health-result"></div>
+    </div>
+
+    <div class="container">
+        <h2>2. Test Transactions</h2>
+        <button onclick="testTransactions()">Get All Transactions</button>
+        <div id="transactions-result"></div>
+    </div>
+
+    <div class="container">
+        <h2>3. Test Summary</h2>
+        <button onclick="testSummary()">Get Summary</button>
+        <div id="summary-result"></div>
+    </div>
+
+    <div class="container">
+        <h2>4. Test Monthly Data</h2>
+        <button onclick="testMonthly()">Get Monthly Data</button>
+        <div id="monthly-result"></div>
+    </div>
+
+    <div class="container">
+        <h2>5. Test Categories</h2>
+        <button onclick="testCategories()">Get Categories</button>
+        <div id="categories-result"></div>
+    </div>
+
+    <div class="container">
+        <h2>📊 Summary</h2>
+        <div id="overall-summary">
+            <p>Klik tombol di atas untuk test API endpoints</p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001';
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.innerHTML = '<p class="loading">Testing...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Backend is running!
+                            <span class="status ok">OK</span>
+                        </div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ Error: ${response.status}
+                            <span class="status fail">FAIL</span>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Cannot connect to backend!
+                        <br><br>
+                        <strong>Error:</strong> ${error.message}
+                        <br><br>
+                        <strong>Kemungkinan penyebab:</strong>
+                        <ul>
+                            <li>Backend belum jalan (jalankan: cd backend && npm run dev)</li>
+                            <li>Port 3001 salah</li>
+                            <li>CORS issue</li>
+                        </ul>
+                        <span class="status fail">FAIL</span>
+                    </div>
+                `;
+            }
+        }
+
+        async function testTransactions() {
+            const resultDiv = document.getElementById('transactions-result');
+            resultDiv.innerHTML = '<p class="loading">Loading transactions...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/finance/transactions?limit=10`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    const transactions = result.data;
+                    
+                    let tableHTML = `
+                        <div class="success">
+                            ✅ Found ${transactions.length} transactions
+                            <span class="status ok">OK</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tanggal</th>
+                                    <th>Deskripsi</th>
+                                    <th>Kategori</th>
+                                    <th>Tipe</th>
+                                    <th>Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    transactions.forEach(t => {
+                        tableHTML += `
+                            <tr>
+                                <td>${t.id}</td>
+                                <td>${new Date(t.date).toLocaleDateString('id-ID')}</td>
+                                <td>${t.description}</td>
+                                <td>${t.category}</td>
+                                <td><span class="badge ${t.type}">${t.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</span></td>
+                                <td>Rp ${parseFloat(t.amount).toLocaleString('id-ID')}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableHTML += `
+                            </tbody>
+                        </table>
+                        <details style="margin-top: 10px;">
+                            <summary style="cursor: pointer;">Show Raw JSON</summary>
+                            <pre>${JSON.stringify(result, null, 2)}</pre>
+                        </details>
+                    `;
+                    
+                    resultDiv.innerHTML = tableHTML;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ No data returned
+                            <span class="status fail">FAIL</span>
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Error: ${error.message}
+                        <span class="status fail">FAIL</span>
+                    </div>
+                `;
+            }
+        }
+
+        async function testSummary() {
+            const resultDiv = document.getElementById('summary-result');
+            resultDiv.innerHTML = '<p class="loading">Loading summary...</p>';
+            
+            try {
+                const year = new Date().getFullYear();
+                const month = new Date().getMonth() + 1;
+                const response = await fetch(`${API_BASE}/api/finance/summary?year=${year}&month=${month}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Summary loaded
+                            <span class="status ok">OK</span>
+                        </div>
+                        <table>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Value</th>
+                            </tr>
+                            <tr>
+                                <td>Total Income</td>
+                                <td style="color: green;">Rp ${parseFloat(result.data.income || 0).toLocaleString('id-ID')}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Expense</td>
+                                <td style="color: red;">Rp ${parseFloat(result.data.expense || 0).toLocaleString('id-ID')}</td>
+                            </tr>
+                            <tr>
+                                <td>Balance</td>
+                                <td style="color: blue; font-weight: bold;">Rp ${parseFloat(result.data.balance || 0).toLocaleString('id-ID')}</td>
+                            </tr>
+                        </table>
+                        <details style="margin-top: 10px;">
+                            <summary style="cursor: pointer;">Show Raw JSON</summary>
+                            <pre>${JSON.stringify(result, null, 2)}</pre>
+                        </details>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ Error loading summary
+                            <span class="status fail">FAIL</span>
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Error: ${error.message}
+                        <span class="status fail">FAIL</span>
+                    </div>
+                `;
+            }
+        }
+
+        async function testMonthly() {
+            const resultDiv = document.getElementById('monthly-result');
+            resultDiv.innerHTML = '<p class="loading">Loading monthly data...</p>';
+            
+            try {
+                const year = new Date().getFullYear();
+                const response = await fetch(`${API_BASE}/api/finance/monthly?year=${year}`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Found ${result.data.length} months
+                            <span class="status ok">OK</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Income</th>
+                                    <th>Expense</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${result.data.map(m => `
+                                    <tr>
+                                        <td>${m.month}</td>
+                                        <td style="color: green;">Rp ${parseFloat(m.income || 0).toLocaleString('id-ID')}</td>
+                                        <td style="color: red;">Rp ${parseFloat(m.expense || 0).toLocaleString('id-ID')}</td>
+                                        <td style="color: blue;">Rp ${parseFloat(m.balance || 0).toLocaleString('id-ID')}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <details style="margin-top: 10px;">
+                            <summary style="cursor: pointer;">Show Raw JSON</summary>
+                            <pre>${JSON.stringify(result, null, 2)}</pre>
+                        </details>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ No data
+                            <span class="status fail">FAIL</span>
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Error: ${error.message}
+                        <span class="status fail">FAIL</span>
+                    </div>
+                `;
+            }
+        }
+
+        async function testCategories() {
+            const resultDiv = document.getElementById('categories-result');
+            resultDiv.innerHTML = '<p class="loading">Loading categories...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/finance/categories`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Found ${result.data.length} categories
+                            <span class="status ok">OK</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${result.data.map(c => `
+                                    <tr>
+                                        <td>${c.id}</td>
+                                        <td>${c.name}</td>
+                                        <td><span class="badge ${c.type}">${c.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <details style="margin-top: 10px;">
+                            <summary style="cursor: pointer;">Show Raw JSON</summary>
+                            <pre>${JSON.stringify(result, null, 2)}</pre>
+                        </details>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ No data
+                            <span class="status fail">FAIL</span>
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ Error: ${error.message}
+                        <span class="status fail">FAIL</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            console.log('🚀 Test page loaded. Click buttons to test API endpoints.');
+        });
+    </script>
+</body>
+</html>
