@@ -21,7 +21,6 @@ body {
 /* --- Navigation Bar --- */
 .main-nav {
     background: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     padding: 1rem 0;
     position: fixed;
     width: 100%;
@@ -42,9 +41,16 @@ body {
     text-decoration: none;
 }
 
-.nav-logo .fa-church {
-    color: #f9c74f; /* Yellow icon */
+.nav-logo img {
+    height: 40px;
+    margin-right: 10px;
+    vertical-align: middle;
 }
+
+/*.nav-logo .fa-church {
+    color: #ff0000;
+}
+*/
 
 .nav-menu {
     list-style: none;
@@ -69,17 +75,20 @@ body {
     color: #fff;
 }
 
+
+
+
 /* --- Hero Section --- */
 .hero-section {
     position: relative;
-    height: 110vh;
+    height: 150vh;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     background: url('/images/home.jpg') no-repeat center center/cover;
-    margin-top: 60px;
+    margin-top: 1px;
 }
 
 
@@ -147,7 +156,7 @@ body {
     display: flex;
     justify-content: space-around;
     gap: 20px;
-    margin-top: -210px; /* Pulls the cards up into the hero section */
+    margin-top: -390px; /* Pulls the cards up into the hero section */
     position: relative;
     z-index: 3;
 }
@@ -1188,3 +1197,4 @@ body {
         line-height: 1.6;
         font-size: 0.95rem;
     }
+    
