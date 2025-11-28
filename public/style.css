@@ -81,7 +81,7 @@ body {
 /* --- Hero Section --- */
 .hero-section {
     position: relative;
-    height: 150vh;
+    height: 120vh;
     color: #fff;
     display: flex;
     align-items: center;
@@ -1198,3 +1198,144 @@ body {
         font-size: 0.95rem;
     }
     
+/* --- Responsiveness (Mobile View) --- */
+/* =========================================
+   RESPONSIVE MOBILE (Otomatis)
+   Tanpa Tombol Toggle
+   ========================================= */
+
+@media (max-width: 768px) {
+    
+    /* 1. Container agar tidak terlalu mepet pinggir HP */
+    .container {
+        padding: 0 20px;
+        width: 100%;
+    }
+
+    /* 2. Navigasi: Logo dan Menu Menumpuk ke Bawah */
+    .main-nav .container {
+        flex-direction: column; /* Ubah baris jadi kolom */
+        padding: 15px 20px;
+    }
+
+    .nav-logo {
+        margin-bottom: 15px; /* Jarak antara logo dan menu */
+    }
+
+    .nav-menu {
+        flex-direction: column; /* Menu berbaris ke bawah */
+        width: 100%;
+        text-align: center; /* Teks rata tengah */
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-menu li {
+        margin: 0;
+        border-bottom: 1px solid #f0f0f0; /* Garis pemisah tipis */
+        width: 100%;
+    }
+
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-menu a {
+        display: block; /* Agar area klik luas */
+        padding: 12px 0;
+    }
+
+    /* Dropdown di Mobile: Tampil statis di bawah induknya (tidak mengambang) */
+    .dropdown-menu {
+        position: relative; 
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+        border: 1px solid #eee;
+        background-color: #fcfcfc;
+        display: none; /* Tetap sembunyi sampai di-hover/klik */
+    }
+    
+    /* Agar di HP dropdown muncul saat menu disentuh */
+    .nav-menu li:hover .dropdown-menu {
+        display: block;
+    }
+
+    /* 3. Hero Section (Gambar Utama) */
+    .hero-section {
+        height: auto; /* Tinggi menyesuaikan isi */
+        min-height: 60vh; /* Minimal setengah layar */
+        padding: 80px 0; /* Beri ruang atas bawah */
+        margin-top: 140px; /* Turunkan karena header makin tinggi */
+    }
+
+    .hero-content h1 {
+        font-size: 2rem; /* Perkecil font judul */
+    }
+
+    /* 4. Kartu Info (Jadwal Misa) */
+    .info-cards {
+        flex-direction: column; /* Menumpuk ke bawah */
+        margin-top: 0; /* Reset posisi negatif */
+        gap: 15px;
+        background-color: #333; /* Beri latar gelap agar tulisan terbaca */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .info-card {
+        width: 100%; /* Lebar penuh */
+        margin-bottom: 10px;
+        backdrop-filter: none; /* Matikan efek kaca berat di HP */
+        background: rgba(255,255,255,0.1);
+    }
+
+    /* 5. Kartu Event & Ministry (Berita & Pelayanan) */
+    .event-cards-container, 
+    .ministry-cards-container,
+    .contact-grid,
+    .about-section-grid {
+        flex-direction: column; /* Semua grid jadi satu kolom */
+    }
+
+    .event-card, 
+    .ministry-card,
+    .contact-info-col,
+    .contact-form-col {
+        width: 100%; /* Lebar penuh */
+        margin-bottom: 20px;
+        border-left-width: 5px; /* Pastikan border warna tetap terlihat */
+    }
+
+    /* 6. Footer */
+    .footer-content {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .newsletter-form {
+        flex-direction: column;
+    }
+    
+    .newsletter-form input {
+        border-radius: 5px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    
+    .newsletter-form button {
+        border-radius: 5px;
+        width: 100%;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .footer-bottom-links a {
+        margin: 0 10px;
+    }
+}
