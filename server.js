@@ -95,6 +95,10 @@ app.get('/contact', (req, res) => {
     res.render('contact');
 });
 
+app.get('/sakramen', (req, res) => {
+    res.render('sakramen');
+});
+    
 app.get('/calendar', (req, res) => {
     res.render('calendar');
 });
@@ -102,6 +106,7 @@ app.get('/calendar', (req, res) => {
 app.get('/logout', (req, res) => {
     res.redirect('/');
 });
+
 
 
 // --- LOGIC FORM (POST) ---

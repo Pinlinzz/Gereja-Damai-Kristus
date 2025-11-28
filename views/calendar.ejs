@@ -9,13 +9,42 @@
                 <i class="fas fa-church"></i> Gereja Damai
             </a>
             <ul class="nav-menu">
-                <li><a href="/" class="active">Home</a></li>
-                <li><a href="/calendar">Kalendar</a></li>
-                <li><a href="/about">About</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/calendar" class="active">Kalendar</a></li>
+                <li>
+                    <a href="/about">About <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Arah Dasar KAJ</a></li>
+                        <li><a href="#">Dewan Paroki</a></li>
+                        <li><a href="#">Wilayah dan Lingkungan</a></li>
+                    </ul>
+                </li>
                 <li><a href="/contact">Contact</a></li>
-                <li><a href="">Sakramen</a></li>
-                <li><a href="">Pelayanan</a></li>
-                <li><a href="">Donasi</a></li>
+                <li>
+                    <a href="#">Sakramen <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Pembabtisan</a></li>
+                        <li><a href="#">Ekaristi</a></li>
+                        <li><a href="#">Krisma</a></li>
+                        <li><a href="#">Tobat</a></li>
+                        <li><a href="#">Perkawinan</a></li>
+                        <li><a href="#">Pengurapan Orang Sakit</a></li>
+                        <li><a href="#">Imamat</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Pelayanan <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Katekese</a></li>
+                        <li><a href="#">Bina Iman Anak</a></li>
+                        <li><a href="#">Seksi Komsos</a></li>
+                        <li><a href="#">Legio Maria</a></li>
+                        <li><a href="#">PSKR</a></li>
+                        <li><a href="#">Komsos</a></li>
+                        <li><a href="#">OMK</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Donasi</a></li>
                 <li><a href="/login">Login</a></li>
             </ul>
         </div>
@@ -24,8 +53,8 @@
     <main class="page-content">
         <div class="container">
             <header class="page-header">
-                <h1>Kalendar Bulanan </h1>
-
+                <h1>Kalendar Kegiatan Gereja</h1>
+                <p>Jadwal Misa, Kegiatan Komunitas, dan Acara Paroki</p>
             </header>
 
             <div class="calendar-container">
@@ -34,30 +63,188 @@
         </div>
     </main>
 
+    <div class="modal-overlay" id="event-modal-overlay">
+        <div class="modal" id="event-modal">
+            <div class="modal-header">
+                <div class="modal-header-content">
+                    <h3 id="modal-title">Event Title</h3>
+                    <span class="event-tag" id="modal-tag">Category</span>
+                </div>
+                <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-detail-item">
+                    <i class="far fa-calendar-alt"></i>
+                    <div>
+                        <span>Tanggal Mulai</span>
+                        <strong id="modal-date"></strong>
+                    </div>
+                </div>
+                <div class="modal-detail-item">
+                    <i class="far fa-clock"></i>
+                    <div>
+                        <span>Waktu</span>
+                        <strong id="modal-time"></strong>
+                    </div>
+                </div>
+                <div class="modal-detail-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <span>Lokasi</span>
+                        <strong id="modal-location"></strong>
+                    </div>
+                </div>
+                <div class="modal-detail-item">
+                    <i class="fas fa-user"></i>
+                    <div>
+                        <span>Penanggung Jawab</span>
+                        <strong id="modal-pj"></strong>
+                        <a href="#" id="modal-contact"></a>
+                    </div>
+                </div>
+                <div class="modal-description">
+                    <h4>Deskripsi</h4>
+                    <p id="modal-description"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <%- include('partials/_footer') %>
 
     <script>
-        // Inisialisasi FullCalendar
         document.addEventListener('DOMContentLoaded', function() {
             const calendarEl = document.getElementById('calendar');
+
+            // --- Fungsi Helper Warna Kategori ---
+            function getCategoryColor(category) {
+                switch (category) {
+                    case 'Misa & Liturgi': return '#3b82f6'; // Biru
+                    case 'Kegiatan Komunitas': return '#10b981'; // Hijau
+                    case 'Doa & Devosi': return '#8b5cf6'; // Ungu
+                    case 'Pastoral & Acara Khusus': return '#f97316'; // Oranye
+                    default: return '#6b7280'; // Abu-abu
+                }
+            }
+
+            // --- Inisialisasi FullCalendar ---
             const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth', // Tampilan awal adalah bulan
-                initialDate: '2025-10-19',   // Atur ke tanggal saat ini atau tanggal dari gambar
+                // Tampilan default
+                initialView: 'dayGridMonth',
+                
+                // === KONFIGURASI HEADER & BUTTON LIST ===
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    // Menambahkan 'listMonth' di kanan
+                    right: 'dayGridMonth,timeGridWeek,listMonth' 
                 },
-                events: [
-                    // Anda bisa menambahkan acara di sini
-                    // Contoh:
-                    {
-                      title: 'Christmas Eve Mass',
-                      start: '2025-12-24T22:00:00'
+                
+                // Mengubah teks tombol agar lebih rapi
+                buttonText: {
+                    today: 'Hari Ini',
+                    month: 'Bulan',
+                    week: 'Minggu',
+                    listMonth: 'List' // Mengubah nama tombol "listMonth" menjadi "List"
+                },
+
+                height: 'auto',
+                
+                // === INTEGRASI DATABASE ===
+                events: async function(info, successCallback, failureCallback) {
+                    try {
+                        // Mengambil data dari endpoint API backend
+                        const response = await fetch('/api/events');
+                        const result = await response.json();
+
+                        if (result.success) {
+                            const events = result.data.map(item => {
+                                return {
+                                    id: item.id,
+                                    title: item.nama_kegiatan,     
+                                    start: item.waktu_mulai,       
+                                    end: item.waktu_selesai,       
+                                    backgroundColor: getCategoryColor(item.kategori),
+                                    borderColor: getCategoryColor(item.kategori),
+                                    extendedProps: {
+                                        description: item.deskripsi,
+                                        location: item.lokasi,
+                                        kategori: item.kategori,
+                                        pj: item.penanggung_jawab,
+                                        contact: item.kontak
+                                    }
+                                };
+                            });
+                            successCallback(events);
+                        } else {
+                            console.error('Gagal mengambil event:', result.error);
+                            failureCallback(result.error);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching events:', error);
+                        failureCallback(error);
                     }
-                ]
+                },
+
+                // === INTERAKSI KLIK EVENT (POP-UP) ===
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault();
+                    const event = info.event;
+                    const props = event.extendedProps;
+
+                    document.getElementById('modal-title').innerText = event.title;
+                    document.getElementById('modal-tag').innerText = props.kategori;
+                    document.getElementById('modal-tag').style.backgroundColor = event.backgroundColor;
+                    document.getElementById('modal-tag').style.color = '#fff';
+                    document.getElementById('modal-tag').style.padding = '2px 8px';
+                    document.getElementById('modal-tag').style.borderRadius = '4px';
+
+                    const startDate = event.start;
+                    document.getElementById('modal-date').innerText = startDate.toLocaleDateString('id-ID', {
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                    });
+                    
+                    const timeOptions = { hour: '2-digit', minute: '2-digit' };
+                    let timeString = startDate.toLocaleTimeString('id-ID', timeOptions);
+                    if (event.end) {
+                        timeString += ' - ' + event.end.toLocaleTimeString('id-ID', timeOptions);
+                    }
+                    document.getElementById('modal-time').innerText = timeString;
+
+                    document.getElementById('modal-location').innerText = props.location || '-';
+                    document.getElementById('modal-pj').innerText = props.pj || '-';
+                    
+                    const contactLink = document.getElementById('modal-contact');
+                    if (props.contact) {
+                        contactLink.innerText = props.contact;
+                        contactLink.href = `tel:${props.contact}`;
+                        contactLink.style.display = 'block';
+                    } else {
+                        contactLink.style.display = 'none';
+                    }
+
+                    document.getElementById('modal-description').innerText = props.description || 'Tidak ada deskripsi.';
+
+                    document.getElementById('event-modal-overlay').classList.add('active');
+                    document.getElementById('event-modal').classList.add('active');
+                }
             });
+
             calendar.render();
+
+            // --- Logic Tutup Modal ---
+            const overlay = document.getElementById('event-modal-overlay');
+            const closeBtn = document.getElementById('modal-close-btn');
+
+            function closeModal() {
+                overlay.classList.remove('active');
+                document.getElementById('event-modal').classList.remove('active');
+            }
+
+            closeBtn.addEventListener('click', closeModal);
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeModal();
+            });
         });
     </script>
 </body>

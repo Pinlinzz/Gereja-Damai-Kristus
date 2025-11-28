@@ -1073,3 +1073,118 @@ body {
 .footer-bottom-links a:hover {
     color: #f9c74f;
 }
+
+/* --- Dropdown Menu Styles --- */
+
+/* Pastikan item menu utama relative agar dropdown muncul tepat di bawahnya */
+.nav-menu li {
+    position: relative;
+}
+
+/* Style untuk container dropdown (Sub-menu) */
+.dropdown-menu {
+    display: none; /* Sembunyikan secara default */
+    position: absolute;
+    top: 100%; /* Muncul tepat di bawah menu utama */
+    left: 0;
+    background-color: #fff;
+    min-width: 220px; /* Lebar minimum dropdown */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 10px 0;
+    z-index: 1000;
+    list-style: none;
+    border-top: 3px solid #f9c74f; /* Aksen warna kuning gereja */
+}
+
+/* Tampilkan dropdown saat menu utama di-hover */
+.nav-menu li:hover .dropdown-menu {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Style untuk item di dalam dropdown */
+.dropdown-menu li {
+    margin: 0; /* Reset margin bawaan nav-menu li */
+    width: 100%;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 20px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    border-radius: 0; /* Hapus radius agar rapi vertikal */
+}
+
+/* Efek hover pada item dropdown */
+.dropdown-menu a:hover {
+    background-color: #fff9e6; /* Warna latar kuning muda */
+    color: #e4b33a; /* Warna teks kuning emas */
+    padding-left: 25px; /* Efek geser sedikit ke kanan */
+}
+
+/* Animasi Fade In halus */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tambahan: Ikon panah kecil */
+.fa-chevron-down {
+    font-size: 0.7em;
+    margin-left: 5px;
+    transition: transform 0.3s;
+}
+
+.nav-menu li:hover .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.sacrament-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .sacrament-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+    }
+
+    .sacrament-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .sacrament-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px auto;
+        border-radius: 50%;
+        background-color: #fff9e6; /* Warna latar kuning muda */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: #f9c74f; /* Warna ikon kuning gereja */
+    }
+
+    .sacrament-card h3 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 1.4rem;
+    }
+
+    .sacrament-card p {
+        color: #666;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
