@@ -1,0 +1,68 @@
+<nav class="main-nav">
+    <div class="container">
+        <a href="/" class="nav-logo">
+            <img src="/images/LOGO_DAMAI_2.png" alt="Logo Gereja Damai">
+            Gereja Damai Kristus
+        </a>
+
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <ul class="nav-menu">
+            <% 
+               // Fungsi untuk cek apakah judul halaman cocok
+               const isActive = (checkTitle) => { 
+                   return typeof title !== 'undefined' && title.includes(checkTitle) ? 'active' : '';
+               } 
+            %>
+
+            <li><a href="/" class="<%= isActive('Home') || isActive('Gereja Damai') %>">Home</a></li>
+            
+            <li><a href="/calendar" class="<%= isActive('Calendar') %>">Kalendar</a></li>
+            
+            <li>
+                <a href="/about" class="<%= isActive('About') %>">About <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Arah Dasar KAJ</a></li>
+                    <li><a href="#">Dewan Paroki</a></li>
+                    <li><a href="#">Wilayah dan Lingkungan</a></li>
+                </ul>
+            </li>
+
+            <li><a href="/contact" class="<%= isActive('Contact') %>">Contact</a></li>
+
+            <li>
+                <a href="/sakramen" class="<%= isActive('Sakramen') %>">Sakramen <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/sakramen#baptis">Pembabtisan</a></li>
+                    <li><a href="/sakramen#ekaristi">Ekaristi</a></li>
+                    <li><a href="/sakramen#krisma">Krisma</a></li>
+                    <li><a href="/sakramen#tobat">Tobat</a></li>
+                    <li><a href="/sakramen#perkawinan">Perkawinan</a></li>
+                    <li><a href="/sakramen#pengurapan">Pengurapan Orang Sakit</a></li>
+                    <li><a href="/sakramen#imamat">Imamat</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#">Pelayanan <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Katekese</a></li>
+                    <li><a href="#">Bina Iman Anak</a></li>
+                    <li><a href="#">Seksi Komsos</a></li>
+                    <li><a href="#">Legio Maria</a></li>
+                    <li><a href="#">PSKR</a></li>
+                    <li><a href="#">Komsos</a></li>
+                    <li><a href="#">OMK</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#">Donasi</a></li>
+            
+            <li><a href="/login" class="<%= isActive('Login') %>">Login</a></li>
+        </ul>
+    </div>
+</nav>

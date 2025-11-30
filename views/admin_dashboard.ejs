@@ -97,14 +97,14 @@
     
     <script>
         // Data user dari server
-        const userData = {
-            userId: <%= user.user_id %>,
-            username: '<%= user.username %>',
-            fullName: '<%= user.full_name %>',
-            email: '<%= user.email %>',
-            role: '<%= user.role_name %>',
-            phoneNumber: '<%= user.phone_number %>'
-        };
+        const userData = <%- JSON.stringify({
+            userId: user.user_id,
+            username: user.username,
+            fullName: user.full_name,
+            email: user.email,
+            role: user.role_name,
+            phoneNumber: user.phone_number
+        }) %>;
         
         // Simpan user data ke localStorage untuk diakses Report Gereja Damai
         localStorage.setItem('gereja_user', JSON.stringify(userData));

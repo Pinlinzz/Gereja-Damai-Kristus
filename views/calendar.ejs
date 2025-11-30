@@ -3,52 +3,7 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
 
 <body>
-    <nav class="main-nav">
-        <div class="container">
-            <a href="/" class="nav-logo">
-                <i class="fas fa-church"></i> Gereja Damai
-            </a>
-            <ul class="nav-menu">
-                <li><a href="/">Home</a></li>
-                <li><a href="/calendar" class="active">Kalendar</a></li>
-                <li>
-                    <a href="/about">About <i class="fas fa-chevron-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Arah Dasar KAJ</a></li>
-                        <li><a href="#">Dewan Paroki</a></li>
-                        <li><a href="#">Wilayah dan Lingkungan</a></li>
-                    </ul>
-                </li>
-                <li><a href="/contact">Contact</a></li>
-                <li>
-                    <a href="#">Sakramen <i class="fas fa-chevron-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Pembabtisan</a></li>
-                        <li><a href="#">Ekaristi</a></li>
-                        <li><a href="#">Krisma</a></li>
-                        <li><a href="#">Tobat</a></li>
-                        <li><a href="#">Perkawinan</a></li>
-                        <li><a href="#">Pengurapan Orang Sakit</a></li>
-                        <li><a href="#">Imamat</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Pelayanan <i class="fas fa-chevron-down"></i></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Katekese</a></li>
-                        <li><a href="#">Bina Iman Anak</a></li>
-                        <li><a href="#">Seksi Komsos</a></li>
-                        <li><a href="#">Legio Maria</a></li>
-                        <li><a href="#">PSKR</a></li>
-                        <li><a href="#">Komsos</a></li>
-                        <li><a href="#">OMK</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Donasi</a></li>
-                <li><a href="/login">Login</a></li>
-            </ul>
-        </div>
-    </nav>
+    <%- include('partials/_navbar') %>
 
     <main class="page-content">
         <div class="container">
