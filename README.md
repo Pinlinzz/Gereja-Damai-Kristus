@@ -1,4 +1,4 @@
-#setup database
+# setup database
 1. jadiin gereja-lengkap.sql sebagai database gereja_db
    
 # Cara Running code
